@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Video Annotation Portfolio — Pranav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#10151C; --ink-2:#1B222C; --ink-3:#242D39;
+  --canvas:#F2F4F7; --surface:#FFFFFF; --border:#E1E5EA;
+  --text:#161B22; --text-muted:#5B6472;
+  --signal:#2DD4BF; --signal-ink:#0B4A44; --signal-dim:#D8F5F1;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0; background:var(--canvas); color:var(--text);
+  font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  line-height:1.65; font-size:16px; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Space Grotesk','Segoe UI',sans-serif; margin:0; letter-spacing:-0.01em;}
+.mono{font-family:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;}
+a{color:inherit;}
+:focus-visible{outline:2px solid var(--signal); outline-offset:3px; border-radius:3px;}
+.container{max-width:1040px; margin:0 auto; padding:0 28px;}
+
+.hero{background:var(--ink); color:#EDF1F5; padding:76px 0 56px; position:relative; overflow:hidden;}
+.hero::before{
+  content:""; position:absolute; inset:0;
+  background:radial-gradient(600px 260px at 85% -10%, rgba(45,212,191,0.16), transparent 60%);
+  pointer-events:none;
+}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--signal); border:1px solid rgba(45,212,191,0.35);
+  padding:6px 12px; border-radius:20px; background:rgba(45,212,191,0.08);
+}
+.eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--signal); box-shadow:0 0 8px var(--signal);}
+.hero h1{font-size:44px; font-weight:600; margin:22px 0 14px; max-width:680px; color:#F5F8FA;}
+.hero p.sub{font-size:16.5px; color:#AEB9C4; max-width:600px; margin:0 0 40px;}
+.hero-demo{background:var(--ink-2); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:22px 26px; max-width:760px;}
+.hero-demo .demo-label{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#7C8896; margin-bottom:14px; display:block;}
+.hero-demo .demo-caption{margin-top:14px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:#6E7A88;}
+
+.index-nav{position:sticky; top:0; z-index:20; background:rgba(242,244,247,0.92); backdrop-filter:blur(6px); border-bottom:1px solid var(--border);}
+.index-nav .container{display:flex; gap:2px; overflow-x:auto;}
+.index-nav a{flex:0 0 auto; display:flex; align-items:baseline; gap:8px; padding:14px 16px; text-decoration:none; font-size:13.5px; color:var(--text-muted); border-bottom:2px solid transparent; white-space:nowrap;}
+.index-nav a .code{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--text); font-weight:600;}
+.index-nav a:hover{color:var(--text); border-bottom-color:var(--border);}
+
+section.task{padding:64px 0; border-bottom:1px solid var(--border);}
+section.task:last-of-type{border-bottom:none;}
+.readout{display:inline-flex; align-items:center; gap:10px; background:var(--ink); color:#DDE7E5; font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.04em; padding:7px 14px; border-radius:20px; margin-bottom:18px;}
+.readout .code{color:var(--signal); font-weight:700;}
+.readout .sep{color:#4A5560;}
+h2{font-size:27px; font-weight:600; margin-bottom:8px;}
+.task-desc{color:var(--text-muted); max-width:640px; margin-bottom:30px; font-size:15.5px;}
+
+.card{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:22px 24px; margin-bottom:16px;}
+.card:last-child{margin-bottom:0;}
+.codeblock{background:var(--ink); color:#C9D4DB; border-radius:10px; padding:18px 20px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; overflow-x:auto; line-height:1.7;}
+.codeblock .k{color:#7FD9C4;} .codeblock .s{color:#F0C36D;} .codeblock .n{color:#9EC4F8;}
+details{margin-top:14px;}
+summary{cursor:pointer; font-size:13px; color:var(--text-muted); font-family:'IBM Plex Mono',monospace; user-select:none;}
+summary:hover{color:var(--text);}
+
+/* tracking demo (SVG animation) */
+.track-frame{background:linear-gradient(180deg,#1B2836,#0F1620); border-radius:14px; padding:0; overflow:hidden; border:1px solid var(--border);}
+.track-frame svg{display:block; width:100%; height:auto;}
+@keyframes trackMove{0%{transform:translateX(6px);} 100%{transform:translateX(560px);}}
+.tracked-object{animation:trackMove 4.2s cubic-bezier(.45,.05,.55,.95) infinite alternate;}
+@media (prefers-reduced-motion:reduce){.tracked-object{animation:none; transform:translateX(280px);}}
+
+/* timeline (action segmentation) */
+.timeline{display:flex; height:58px; border-radius:9px; overflow:hidden; box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);}
+.timeline .seg{display:flex; align-items:center; justify-content:center; color:#fff; font-size:12.5px; font-weight:600; text-align:center; padding:0 6px; line-height:1.25;}
+.timeline-ticks{display:flex; margin-top:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-muted);}
+.timeline-ticks span{border-left:1px solid var(--border); padding-left:6px;}
+
+/* filmstrip (shot boundary) */
+.filmstrip{display:flex; gap:4px;}
+.filmstrip .frame{position:relative; flex:1; border-radius:8px; overflow:hidden; background:#000;}
+.filmstrip .frame img{display:block; width:100%; height:auto; opacity:.94;}
+.filmstrip .frame .flabel{position:absolute; left:0; right:0; bottom:0; background:linear-gradient(0deg,rgba(10,13,18,.88),transparent); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:14px 8px 6px;}
+.filmstrip .frame .flabel b{display:block; font-size:11.5px; font-family:'IBM Plex Sans',sans-serif; font-weight:600;}
+.cut-row{display:flex; gap:4px; margin-top:6px;}
+.cut-row .cut{flex:1; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-muted);}
+
+/* classification cards */
+.ex-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:720px){.ex-grid{grid-template-columns:1fr;}}
+.vid-card{padding:0; overflow:hidden;}
+.vid-card .thumb{position:relative; aspect-ratio:16/10; overflow:hidden; background:#000;}
+.vid-card .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+.vid-card .thumb .dur{position:absolute; right:8px; bottom:8px; background:rgba(10,13,18,.78); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:2px 7px; border-radius:5px;}
+.vid-card .body{padding:18px 20px;}
+.vid-card p.txt{font-size:14px; color:var(--text-muted); margin:0 0 14px;}
+.ex-meta{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.badge{display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:5px 11px; border-radius:20px; color:#fff; letter-spacing:0.01em;}
+.conf{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-muted);}
+
+/* captions */
+.cap-line{display:flex; gap:16px; padding:11px 0; border-bottom:1px dashed var(--border);}
+.cap-line:last-child{border-bottom:none;}
+.cap-time{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--signal-ink); background:var(--signal-dim); border-radius:5px; padding:2px 7px; flex:0 0 auto; height:fit-content;}
+.cap-text{font-size:14.5px;}
+.cap-text .translit{display:block; color:var(--text-muted); font-size:12.5px; margin-top:2px;}
+
+/* flags */
+.flag-row{display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--border);}
+.flag-row:last-child{border-bottom:none;}
+.flag-time{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-muted); flex:0 0 92px;}
+.flag-label{flex:1; font-size:14px;}
+.flag-status{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:700; padding:4px 10px; border-radius:14px; flex:0 0 auto;}
+.flag-clear{background:#DFF4EC; color:#12694B;}
+.flag-review{background:#FCEBE0; color:#9A4A1F;}
+
+footer{padding:56px 0 70px;}
+.foot-grid{display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 28px;}
+.foot-chip{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-muted); border:1px solid var(--border); padding:6px 12px; border-radius:8px; background:var(--surface);}
+footer p{color:var(--text-muted); font-size:13.5px; max-width:640px;}
+
+@media (max-width:600px){
+  .hero{padding:56px 0 40px;} .hero h1{font-size:32px;} .hero-demo{padding:18px;}
+  section.task{padding:46px 0;} h2{font-size:23px;}
+  .flag-time{flex-basis:74px;}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="container">
+    <span class="eyebrow"><span class="dot"></span>Video Annotation Portfolio</span>
+    <h1>Structured signal, frame by frame.</h1>
+    <p class="sub">Sample annotation work across six video task types — in the output formats labeling pipelines actually expect: persistent track IDs, timecoded segments, shot boundaries, and per-frame flags. Built by Pranav, a BCA (AI &amp; ML) student.</p>
+    <div class="hero-demo">
+      <span class="demo-label">Live sample &#183; Object Tracking</span>
+      <div class="track-frame">
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A car driving across the frame with a tracking bounding box locked to it">
+  <rect x="0" y="0" width="900" height="150" fill="#16202C"/>
+  <rect x="0" y="150" width="900" height="110" fill="#0C1117"/>
+  <g opacity="0.55">
+    <rect x="60" y="70" width="90" height="80" fill="#232E3C"/>
+    <rect x="740" y="55" width="110" height="95" fill="#232E3C"/>
+    <rect x="620" y="90" width="70" height="60" fill="#1D2733"/>
+  </g>
+  <g fill="#2A3541">
+    <rect x="0" y="196" width="40" height="8" rx="3"/><rect x="80" y="196" width="40" height="8" rx="3"/>
+    <rect x="160" y="196" width="40" height="8" rx="3"/><rect x="240" y="196" width="40" height="8" rx="3"/>
+    <rect x="320" y="196" width="40" height="8" rx="3"/><rect x="400" y="196" width="40" height="8" rx="3"/>
+    <rect x="480" y="196" width="40" height="8" rx="3"/><rect x="560" y="196" width="40" height="8" rx="3"/>
+    <rect x="640" y="196" width="40" height="8" rx="3"/><rect x="720" y="196" width="40" height="8" rx="3"/>
+    <rect x="800" y="196" width="40" height="8" rx="3"/>
+  </g>
+  <g class="tracked-object">
+    <rect x="-6" y="40" width="118" height="22" rx="5" fill="#2DD4BF"/>
+    <text x="4" y="55.5" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#0B231F">car &#183; id_01</text>
+    <rect x="-8" y="58" width="158" height="112" rx="6" fill="none" stroke="#2DD4BF" stroke-width="3"/>
+    <ellipse cx="35" cy="163" rx="17" ry="17" fill="#12161C"/><ellipse cx="35" cy="163" rx="7" ry="7" fill="#54606C"/>
+    <ellipse cx="107" cy="163" rx="17" ry="17" fill="#12161C"/><ellipse cx="107" cy="163" rx="7" ry="7" fill="#54606C"/>
+    <rect x="8" y="98" width="126" height="55" rx="12" fill="#3A4CB8"/>
+    <rect x="34" y="72" width="72" height="36" rx="10" fill="#3444A6"/>
+    <rect x="41" y="80" width="58" height="21" rx="3" fill="#B6C8E0"/>
+  </g>
+</svg>
+</div>
+      <div class="demo-caption">&#8618; one of six annotation types below &#8212; scroll to see the rest</div>
+    </div>
+  </div>
+</header>
+
+<nav class="index-nav">
+  <div class="container">
+    <a href="#tracking"><span class="code">TRACK</span>Tracking</a>
+    <a href="#segmentation"><span class="code">SEG</span>Segmentation</a>
+    <a href="#classification"><span class="code">CLS</span>Classification</a>
+    <a href="#shot-boundary"><span class="code">SHOT</span>Shot boundary</a>
+    <a href="#captioning"><span class="code">CAP</span>Captioning</a>
+    <a href="#flagging"><span class="code">FLAG</span>Flagging</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="tracking" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; TRACK</span><span class="sep">|</span>1 object &#183; persistent ID &#183; 1920&#215;1080 source</span>
+    <h2>Object Tracking</h2>
+    <p class="task-desc">Tracking the same object across consecutive frames, keeping one consistent ID as its position and size change &#8212; the annotation format behind autonomous-driving and surveillance datasets.</p>
+    <div class="track-frame">
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A car driving across the frame with a tracking bounding box locked to it">
+  <rect x="0" y="0" width="900" height="150" fill="#16202C"/>
+  <rect x="0" y="150" width="900" height="110" fill="#0C1117"/>
+  <g opacity="0.55">
+    <rect x="60" y="70" width="90" height="80" fill="#232E3C"/>
+    <rect x="740" y="55" width="110" height="95" fill="#232E3C"/>
+    <rect x="620" y="90" width="70" height="60" fill="#1D2733"/>
+  </g>
+  <g fill="#2A3541">
+    <rect x="0" y="196" width="40" height="8" rx="3"/><rect x="80" y="196" width="40" height="8" rx="3"/>
+    <rect x="160" y="196" width="40" height="8" rx="3"/><rect x="240" y="196" width="40" height="8" rx="3"/>
+    <rect x="320" y="196" width="40" height="8" rx="3"/><rect x="400" y="196" width="40" height="8" rx="3"/>
+    <rect x="480" y="196" width="40" height="8" rx="3"/><rect x="560" y="196" width="40" height="8" rx="3"/>
+    <rect x="640" y="196" width="40" height="8" rx="3"/><rect x="720" y="196" width="40" height="8" rx="3"/>
+    <rect x="800" y="196" width="40" height="8" rx="3"/>
+  </g>
+  <g class="tracked-object">
+    <rect x="-6" y="40" width="118" height="22" rx="5" fill="#2DD4BF"/>
+    <text x="4" y="55.5" font-family="IBM Plex Mono, monospace" font-size="12" font-weight="700" fill="#0B231F">car &#183; id_01</text>
+    <rect x="-8" y="58" width="158" height="112" rx="6" fill="none" stroke="#2DD4BF" stroke-width="3"/>
+    <ellipse cx="35" cy="163" rx="17" ry="17" fill="#12161C"/><ellipse cx="35" cy="163" rx="7" ry="7" fill="#54606C"/>
+    <ellipse cx="107" cy="163" rx="17" ry="17" fill="#12161C"/><ellipse cx="107" cy="163" rx="7" ry="7" fill="#54606C"/>
+    <rect x="8" y="98" width="126" height="55" rx="12" fill="#3A4CB8"/>
+    <rect x="34" y="72" width="72" height="36" rx="10" fill="#3444A6"/>
+    <rect x="41" y="80" width="58" height="21" rx="3" fill="#B6C8E0"/>
+  </g>
+</svg>
+</div>
+    <details>
+      <summary>View per-frame JSON output &#9656;</summary>
+      <pre class="codeblock">[
+  {"frame": <span class="n">0</span>, "timestamp": <span class="s">"00:00.00"</span>, "track_id": <span class="s">"car_01"</span>, "bbox": [<span class="n">120</span>, <span class="n">410</span>, <span class="n">260</span>, <span class="n">150</span>]},
+  {"frame": <span class="n">30</span>, "timestamp": <span class="s">"00:01.00"</span>, "track_id": <span class="s">"car_01"</span>, "bbox": [<span class="n">360</span>, <span class="n">405</span>, <span class="n">265</span>, <span class="n">155</span>]},
+  {"frame": <span class="n">60</span>, "timestamp": <span class="s">"00:02.00"</span>, "track_id": <span class="s">"car_01"</span>, "bbox": [<span class="n">610</span>, <span class="n">400</span>, <span class="n">270</span>, <span class="n">160</span>]},
+  {"frame": <span class="n">90</span>, "timestamp": <span class="s">"00:03.00"</span>, "track_id": <span class="s">"car_01"</span>, "bbox": [<span class="n">860</span>, <span class="n">395</span>, <span class="n">275</span>, <span class="n">165</span>]}
+]</pre>
+    </details>
+  </div>
+</section>
+
+<section id="segmentation" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; SEG</span><span class="sep">|</span>4 actions &#183; 14-second clip &#183; start/end timecodes</span>
+    <h2>Temporal Action Segmentation</h2>
+    <p class="task-desc">Marking the start and end timecode of each distinct action in a clip &#8212; the format behind activity-recognition and workplace-safety datasets.</p>
+    <div class="card">
+      <div class="timeline"><div class="seg" style="flex:3;background:#6B7684;">Idle / seated</div><div class="seg" style="flex:3;background:#E8804B;">Reaches for phone</div><div class="seg" style="flex:5;background:#4C7EF3;">Typing</div><div class="seg" style="flex:3;background:#1FA97A;">Stands up</div></div>
+      <div class="timeline-ticks"><span style="flex:3">00:00</span><span style="flex:3">00:03</span><span style="flex:5">00:06</span><span style="flex:3">00:11</span><span style="flex:0;border:none;">00:14</span></div>
+      <details>
+        <summary>View JSON output &#9656;</summary>
+        <pre class="codeblock">[
+  {"label": <span class="s">"Idle / seated"</span>, "start": <span class="s">"00:00"</span>, "end": <span class="s">"00:03"</span>},
+  {"label": <span class="s">"Reaches for phone"</span>, "start": <span class="s">"00:03"</span>, "end": <span class="s">"00:06"</span>},
+  {"label": <span class="s">"Typing"</span>, "start": <span class="s">"00:06"</span>, "end": <span class="s">"00:11"</span>},
+  {"label": <span class="s">"Stands up"</span>, "start": <span class="s">"00:11"</span>, "end": <span class="s">"00:14"</span>}
+]</pre>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="classification" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; CLS</span><span class="sep">|</span>4 categories &#183; whole-clip label &#183; confidence-ranked</span>
+    <h2>Video Classification</h2>
+    <p class="task-desc">Sorting an entire clip into a fixed content category &#8212; the first pass before any frame-level work happens.</p>
+    <div class="ex-grid">
+    <div class="card vid-card">
+      <div class="thumb"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAEsCAIAAACUnPcNAAAEh0lEQVR42u3dsUrrABSA4UTaVxAcfAcXO3UqxKm4+wp9oL6Cu3Qy0ClTXXwHB8EhkCGTi4MEBy0ECclJ8n2PcO7JzyG5tzctqzoBIJ4LIwAQaAAEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBkCgAQQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaACBBkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaQKABEGgABBpAoAEQaACBBkCgAfjbwggGtFpnhkB8pyI3hEGkZVWbgjSDTAfkFYc6g70VaGw5theBtt9ghwUam41NRqABBBpHB9hngQZAoAHGxr8kjOiYHwyB/m2yrSEINNJM3PWT6Ti84gAQaJzP2EMEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBkCgAQQaAIEGEGgABBpAoAEQaPix2y8NAQSauI2WaRBoZBoEGv6baUMAgcYpDQINMg0CjUyDQINMg0BDk2lDQKDBKQ0CDTINAo1Mg0CDTINAQ5NpQ0CgwSkNAg0yjUCDTINAg0yDQEOTaUNAoMEpDQINMo1Ag0yDQINMg0BDk2lDQKDBKQ0CDTLNJCyMAJIk2e8+DQGBBmmGVrziQJ3BBQ3SDAIN0oxAgzSDQIM0MzM+EqLO4IIGaQaBBmlGoEGaQaBBmpkZHwlRZ3BBgzSDQCPNINAgzSDQIM3MjI+EqDO4oEGaQaCRZhBokGYQaKQZZsZHQtQZXNAgzSDQSDNMgFccqDMINAACDSDQAAg0gEADINAACDSAQAMg0AACDYBAAyDQAAINgEADCDQAAg0g0Axrk20NAXuIQANE5/8kjHi8HPODUeB2RqA9J0BQXnEACDQAAh3QqcgNAfuMQAMINI4ObDICbbPBDgs09htsr0DbcrC3nJeWVW0KbdzdPxgCdOX56dEQXNDqDJ4pgbZJgCdLoO0QeL4E2vbYHvCUCTQAAg0g0AAINIBAAyDQAAINgEADINAd8Hsu4CkTaNsDni8E2g6BJ2sk/B50W/F/MeDj/c0fE98ur67VWaAJ4eZ2bQj89vpSGMKoecUBINA4n7EbCDSAQAMg0JzhQxB2Q6AB6JW/ZjcdvgjhdhZoAPrgFQeAQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINAACDSDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINIBAAyDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAININBGACDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINIBAAyDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAININAACDQAAg0g0AB07QvIXdhh2Ub26gAAAABJRU5ErkJggg==" alt=""><span class="dur">0:42</span></div>
+      <div class="body">
+        <p class="txt">Screen recording with voiceover, walking through a step-by-step software setup.</p>
+        <div class="ex-meta">
+          <span class="badge" style="background:#4C7EF3">Tutorial / How-To</span>
+          <span class="conf">confidence 0.96</span>
+        </div>
+      </div>
+    </div>
+    <div class="card vid-card">
+      <div class="thumb"><img src="data:image/png;base64,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" alt=""><span class="dur">0:18</span></div>
+      <div class="body">
+        <p class="txt">Handheld footage of a 400m sprint finish at a track meet.</p>
+        <div class="ex-meta">
+          <span class="badge" style="background:#1FA97A">Sports Highlight</span>
+          <span class="conf">confidence 0.98</span>
+        </div>
+      </div>
+    </div>
+    <div class="card vid-card">
+      <div class="thumb"><img src="data:image/png;base64,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" alt=""><span class="dur">1:05</span></div>
+      <div class="body">
+        <p class="txt">Studio shot of a single product rotating with on-screen spec callouts.</p>
+        <div class="ex-meta">
+          <span class="badge" style="background:#E8804B">Product Review</span>
+          <span class="conf">confidence 0.93</span>
+        </div>
+      </div>
+    </div>
+    <div class="card vid-card">
+      <div class="thumb"><img src="data:image/png;base64,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" alt=""><span class="dur">3:14</span></div>
+      <div class="body">
+        <p class="txt">Static camera, coffee shop setting, casual to-camera narration.</p>
+        <div class="ex-meta">
+          <span class="badge" style="background:#D64FA0">Vlog / Lifestyle</span>
+          <span class="conf">confidence 0.95</span>
+        </div>
+      </div>
+    </div></div>
+  </div>
+</section>
+
+<section id="shot-boundary" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; SHOT</span><span class="sep">|</span>25-second clip &#183; 4 cuts detected &#183; 5 shots</span>
+    <h2>Shot Boundary Detection</h2>
+    <p class="task-desc">Detecting hard cuts and scene changes so a long recording can be split, indexed, and searched shot by shot.</p>
+    <div class="card">
+      <div class="filmstrip"><div class="frame"><img src="data:image/png;base64,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" alt=""><div class="flabel"><b>Shot 1</b>00:00–00:04</div></div><div class="frame"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAEsCAIAAACUnPcNAAAEh0lEQVR42u3dsUrrABSA4UTaVxAcfAcXO3UqxKm4+wp9oL6Cu3Qy0ClTXXwHB8EhkCGTi4MEBy0ECclJ8n2PcO7JzyG5tzctqzoBIJ4LIwAQaAAEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBkCgAQQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaAAEGkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaAIEGEGgABBpAoAEQaACBBkCgARBoAIEGQKABBBoAgQZAoAEEGgCBBhBoAAQaQKABEGgABBpAoAEQaACBBkCgAfjbwggGtFpnhkB8pyI3hEGkZVWbgjSDTAfkFYc6g70VaGw5theBtt9ghwUam41NRqABBBpHB9hngQZAoAHGxr8kjOiYHwyB/m2yrSEINNJM3PWT6Ti84gAQaJzP2EMEGkCgARBoAIEGQKABEGgAgQZAoAEEGgCBBkCgAQQaAIEGEGgABBpAoAEQaPix2y8NAQSauI2WaRBoZBoEGv6baUMAgcYpDQINMg0CjUyDQINMg0BDk2lDQKDBKQ0CDTINAo1Mg0CDTINAQ5NpQ0CgwSkNAg0yjUCDTINAg0yDQEOTaUNAoMEpDQINMo1Ag0yDQINMg0BDk2lDQKDBKQ0CDTLNJCyMAJIk2e8+DQGBBmmGVrziQJ3BBQ3SDAIN0oxAgzSDQIM0MzM+EqLO4IIGaQaBBmlGoEGaQaBBmpkZHwlRZ3BBgzSDQCPNINAgzSDQIM3MjI+EqDO4oEGaQaCRZhBokGYQaKQZZsZHQtQZXNAgzSDQSDNMgFccqDMINAACDSDQAAg0gEADINAACDSAQAMg0AACDYBAAyDQAAINgEADCDQAAg0g0Axrk20NAXuIQANE5/8kjHi8HPODUeB2RqA9J0BQXnEACDQAAh3QqcgNAfuMQAMINI4ObDICbbPBDgs09htsr0DbcrC3nJeWVW0KbdzdPxgCdOX56dEQXNDqDJ4pgbZJgCdLoO0QeL4E2vbYHvCUCTQAAg0g0AAINIBAAyDQAAINgEADINAd8Hsu4CkTaNsDni8E2g6BJ2sk/B50W/F/MeDj/c0fE98ur67VWaAJ4eZ2bQj89vpSGMKoecUBINA4n7EbCDSAQAMg0JzhQxB2Q6AB6JW/ZjcdvgjhdhZoAPrgFQeAQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINAACDSDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINIBAAyDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAININBGACDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAINgEADCDQAAg0g0AAINIBAAyDQAAg0gEADINAAAg2AQAMg0AACDYBAAwg0AAININAACDQAAg0g0AB07QvIXdhh2Ub26gAAAABJRU5ErkJggg==" alt=""><div class="flabel"><b>Shot 2</b>00:04–00:09</div></div><div class="frame"><img src="data:image/png;base64,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" alt=""><div class="flabel"><b>Shot 3</b>00:09–00:13</div></div><div class="frame"><img src="data:image/png;base64,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" alt=""><div class="flabel"><b>Shot 4</b>00:13–00:19</div></div><div class="frame"><img src="data:image/png;base64,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" alt=""><div class="flabel"><b>Shot 5</b>00:19–00:25</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="captioning" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; CAP</span><span class="sep">|</span>4 timestamped lines &#183; English + Hindi</span>
+    <h2>Timestamped Captioning</h2>
+    <p class="task-desc">Writing short, timecoded descriptions of on-screen action &#8212; used for accessibility audio-description, search indexing, and training video-language models.</p>
+    <div class="card"><div class="cap-line"><span class="cap-time">00:00</span><div class="cap-text"><span>A person walks into frame from the left and sits down at a desk.</span></div></div><div class="cap-line"><span class="cap-time">00:04</span><div class="cap-text"><span>They pick up a smartphone and check the screen.</span></div></div><div class="cap-line"><span class="cap-time">00:08</span><div class="cap-text"><span style="font-family:'Noto Sans Devanagari','IBM Plex Sans',sans-serif;">वे लैपटॉप पर टाइप करना शुरू करते हैं।</span><span class="translit">ve laptop par type karna shuru karte hain — "They begin typing on the laptop."</span></div></div><div class="cap-line"><span class="cap-time">00:14</span><div class="cap-text"><span>They close the laptop and stand up to leave.</span></div></div></div>
+  </div>
+</section>
+
+<section id="flagging" class="task">
+  <div class="container">
+    <span class="readout"><span class="code">TASK &#183; FLAG</span><span class="sep">|</span>5 checks &#183; per-segment safety &amp; quality review</span>
+    <h2>Frame-Level Content &amp; Quality Flagging</h2>
+    <p class="task-desc">Reviewing a clip segment by segment for content-safety and technical-quality signals before it's used for training or publishing.</p>
+    <div class="card"><div class="flag-row"><span class="flag-time">00:00–00:14</span><span class="flag-label">Face visible on screen</span><span class="flag-status flag-clear">clear</span></div><div class="flag-row"><span class="flag-time">00:00–00:14</span><span class="flag-label">Safe for all audiences</span><span class="flag-status flag-clear">clear</span></div><div class="flag-row"><span class="flag-time">00:06–00:07</span><span class="flag-label">Motion blur detected</span><span class="flag-status flag-review">flag for review</span></div><div class="flag-row"><span class="flag-time">00:00–00:14</span><span class="flag-label">On-screen text / overlay</span><span class="flag-status flag-clear">none detected</span></div><div class="flag-row"><span class="flag-time">00:11–00:14</span><span class="flag-label">Low-light / underexposed</span><span class="flag-status flag-review">flag for review</span></div></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <h2 style="font-size:20px;">Formats &amp; conventions covered</h2>
+    <div class="foot-grid">
+      <span class="foot-chip">Persistent track IDs (MOT-style)</span>
+      <span class="foot-chip">Timecoded JSON segments</span>
+      <span class="foot-chip">Shot-boundary indexing</span>
+      <span class="foot-chip">Whole-clip classification</span>
+      <span class="foot-chip">Accessibility captioning</span>
+      <span class="foot-chip">Hindi captioning</span>
+    </div>
+    <p>Companion piece to the text/image data-annotation portfolio — same underlying rigor, applied to video: every timecode and coordinate above is internally consistent with the demo it describes. Comfortable working in whatever schema a project already uses (MOT, COCO-video, custom JSON, or a client's own spec).</p>
+  </div>
+</footer>
+
+</body>
+</html>
